@@ -6,7 +6,7 @@
 /*   By: mamaurai <mamaurai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:58:01 by mamaurai          #+#    #+#             */
-/*   Updated: 2022/03/25 17:26:47 by mamaurai         ###   ########.fr       */
+/*   Updated: 2022/03/26 13:50:09 by mamaurai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "libft.h"
 #include <stdbool.h>
+#include <libc.h> // to delete
 
 # define FLAGS_ALLOW	"arRtl"
 
@@ -30,7 +31,7 @@
 
 #define INVALID_FLAG(c) __dprintf(STDERR_FILENO, "ls : invalid option -- %c\nusage: ls [%s]\n", c, FLAGS_ALLOW);
 
-struct	option
+struct	s_option_internal
 {
 	const char			_short_f;
 	const char			*_long_f;
@@ -89,15 +90,7 @@ enum
 	FLAG_COMMA = (1ULL << 43)
 };
 
-const struct option	flags[] =
-{
-	{'a', "all", FLAG_A_MIN, false},
-	{'R', "recursive", FLAG_R_MAJ, false},
-	{'r', "reverse", FLAG_R_MIN, false},
-	{'t', NULL, FLAG_T_MIN, false},
-	{'l', NULL, FLAG_L_MIN, false},
-	{0, NULL, 0, false}
-};
+extern const struct s_option_internal	flags[];
 
 
 typedef struct	s_ls
@@ -108,6 +101,10 @@ typedef struct	s_ls
 
 
 #define SINGLETON_STACK	42
+
+/*
+**	FUNCTIONS
+*/
 
 t_ls*	s (void);
 

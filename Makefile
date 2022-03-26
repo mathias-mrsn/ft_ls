@@ -1,4 +1,4 @@
-NAME =		ls
+NAME =		ft_ls
 
 SRCS = 		${shell find ./srcs -name "*.c"}
 
@@ -6,7 +6,7 @@ OBJS = ${SRCS:.c=.o}
 INCS	=	-I ./includes -I ./libft/includes
 LIBC	=	libft/libft.a
 CC		=	clang
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-fsanitize=address
 RM		=	rm -rf
 SYSTEM	=	${shell uname}
 
