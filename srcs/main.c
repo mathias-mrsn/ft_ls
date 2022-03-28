@@ -28,6 +28,9 @@ void
 _print_specs(void)
 {
 	printf("FLAGS = [%llu]\n", s()->flags);
+	printf("FILES = ");
+	for (t_dir *tmp = s->head; tmp; tmp = tmp->next)
+		printf("%s ", tmp->_filename);
 }
 
 /*	END	*/
@@ -44,10 +47,17 @@ _is_correct_flag (char c)
 int
 parsing_files (t_ls* s, int ac, char** av, int i)
 {
-	(void)s;
-	(void)ac;
-	(void)av;
-	for ( ; i < ac; i++);
+	DIR	*dir;
+
+	for ( ; i < ac; i++)
+	{
+		dir = opendir(av[i]);
+		if (!dir)
+			ERRNO_ERR(av[i]); return (__FAILURE);
+		else
+			add_file_back(&s->dirs, av[i]);
+		closedir(dir);
+	}
 	return (__SUCCESS);
 }
 

@@ -16,6 +16,7 @@
 #include "libft.h"
 #include <stdbool.h>
 #include <libc.h> // to delete
+#include <dirent.h>
 
 # define FLAGS_ALLOW	"arRtl"
 
@@ -30,20 +31,27 @@
 # endif
 
 #define INVALID_FLAG(c) __dprintf(STDERR_FILENO, "ls : invalid option -- %c\nusage: ls [%s]\n", c, FLAGS_ALLOW);
+#define ERRNO_ERR(s) __dprintf(STDERR_FILENO, "ls: %s: %s\n", s, strerror(errno));
 
 struct	s_option_internal
 {
 	const char			_short_f;
-	const char			*_long_f;
+	const char*			_long_f;
 	const long			_bit;
 	const t_boolean		_argument : 1;
 };
+
+typedef struct s_dir
+{
+	const char*			_filename;
+	struct s_dir*		_next;
+}				t_dir;
 
 enum
 {
 	FLAG_MINUS = (1ULL << 0),
 	FLAG_AT = (1ULL << 1),
-	
+
 	FLAG_A_MAJ = (1ULL << 2),
 	FLAG_B_MAJ = (1ULL << 3),
 	FLAG_C_MAJ = (1ULL << 4),
@@ -59,7 +67,7 @@ enum
 	FLAG_T_MAJ = (1ULL << 14),
 	FLAG_U_MAJ = (1ULL << 15),
 	FLAG_W_MAJ = (1ULL << 16),
-	
+
 	FLAG_A_MIN = (1ULL << 17),
 	FLAG_B_MIN = (1ULL << 18),
 	FLAG_C_MIN = (1ULL << 19),
@@ -84,7 +92,7 @@ enum
 	FLAG_W_MIN = (1ULL << 38),
 	FLAG_X_MIN = (1ULL << 39),
 	FLAG_Y_MIN = (1ULL << 40),
-	
+
 	FLAG_ONE = (1ULL << 41),
 	FLAG_PERCENT = (1ULL << 42),
 	FLAG_COMMA = (1ULL << 43)
@@ -96,16 +104,26 @@ extern const struct s_option_internal	flags[];
 typedef struct	s_ls
 {
 	uint64_t	flags;
-	t_list		*dir;
+	t_dir*		dirs;
 }				t_ls;
 
 
 #define SINGLETON_STACK	42
+#define DIR_STACK		2
 
 /*
 **	FUNCTIONS
 */
 
 t_ls*	s (void);
+
+/*
+**	LIST
+*/
+
+t_boolean
+add_file_back(t_file **head, const char* filename);
+t_boolean
+add_file_front(t_file** head, const char* filename);
 
 #endif
