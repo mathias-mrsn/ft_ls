@@ -6,7 +6,7 @@
 /*   By: mamaurai <mamaurai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 14:58:01 by mamaurai          #+#    #+#             */
-/*   Updated: 2022/03/26 13:50:09 by mamaurai         ###   ########.fr       */
+/*   Updated: 2022/03/29 18:24:48 by mamaurai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <libc.h> // to delete
 #include <dirent.h>
+#include <errno.h>
 
 # define FLAGS_ALLOW	"arRtl"
 
@@ -44,6 +45,7 @@ struct	s_option_internal
 typedef struct s_dir
 {
 	const char*			_filename;
+	uint32_t		_type;
 	struct s_dir*		_next;
 }				t_dir;
 
@@ -122,8 +124,24 @@ t_ls*	s (void);
 */
 
 t_boolean
-add_file_back(t_file **head, const char* filename);
+add_file_back(t_dir**, const char*, uint32_t);
 t_boolean
-add_file_front(t_file** head, const char* filename);
+add_file_front(t_dir**, const char*, uint32_t);
+
+/*
+**	PARSING
+*/
+
+int
+parsing_flags (t_ls*, int, char**);
+
+/*
+**	DISPLAY
+*/
+
+int
+recursive_ls (t_ls*, const char*);
+int
+ls_launcher (t_ls* s);
 
 #endif
